@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> McCdama || D3 || Axes in D3 </title>
+    <link rel="shortcut icon" href="./../favicon.ico"> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style type="text/css">
+    
+</style>
+</head>
+<body>
+
+<script>
+/* :
+An axis is made of lines, ticks and labels.
+An axis uses scale, so each axis will need to be given a scale to work with.
+::::::::::::::::::::::::::::::::::::::::::
+d3.axisTop(): Creates top horizontal axis.
+d3.axisLeft(): Creates left vertical axis.
+
+d3.axisRight(): Creates vertical right-oriented axis.
+d3.axisBottom(): Creates bottom horizontal axis.
+
+*/
+
+var width = 400,
+    height = 100;
+
+var data = [10, 15, 20, 25, 30];
+
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var scale = d3.scaleLinear().domain([d3.min(data), d3.max(data)]).range([0, width-100])
+
+
+
+var x_axis = d3.axisBottom()
+                .scale(scale);
+
+svg.append("g")
+.call(x_axis)
+
+//Similarly, create a vertical axis using d3.axisLeft()
+var width1 = 400,
+    height1 = 400;
+
+var data1 = [10, 15, 20, 25, 30];
+
+ var svg1 = d3.select("body")
+                .append("svg")
+                .attr("width", width1)
+                .attr("height", height1);
+
+ var scale1 = d3.scaleLinear()
+                  .domain([d3.min(data1), d3.max(data1)])
+                  .range([height1/2, 0]);
+
+ var y_axis = d3.axisLeft()
+                  .scale(scale1);
+
+svg1.append("g")
+       .attr("transform", "translate(50, 10)")
+       .call(y_axis);
+
+
+
+
+
+</script>
+</body>
+
+</html>
