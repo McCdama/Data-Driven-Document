@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <title> McCdama || D3 </title>
+</head>
+<style type="text/css">
+    .error{
+        color: navajowhite;
+    }
+    .run{
+        color: powderblue;
+        font-size: large;
+    }
+</style>
+<body>
+   
+
+        <p>Error: This is for Attribut Value Dynamiclly</p>
+
+       <p>Warning: This is for Attribut Value Dynamiclly</p>
+
+  <div>
+
+        <p> Func </p>
+        <p> Func 1 </p>
+        <p> Func 2 </p>
+
+        <p>Ajassem</p>
+        <h4> This for the inner html</h4>
+
+     <p id="loveyagnbi">Para for create a new DOM element at the emd of the selected</p>
+
+
+     <p id="dummy"> This is dummy Error, to set any valid atteibute to any selec. Dom ele.</p>
+
+
+     <p> But here with the checkbox and the radio Button should use the property() methode </p>
+
+
+<input type="checkbox" id="ch1">
+    
+<p> another checkbox  </p>
+<input type="checkbox" id="ch2">
+
+     <p id="classee">This is for CLASSED</p>
+
+    </div> 
+
+<script>
+   d3.select("p").text("This is edited from the script..")
+
+   d3.select("body").append("p").text("HAY I#m Span and i set before the end of the body tag").style("color","green")
+
+   d3.select("#loveyagnbi").insert("p").text("we are insid you, just before the end of it")
+
+   d3.select("#loveyagnbi").remove()
+
+   d3.select("h4").html('<span> I#m here to replace the h4').style("color", "Red")
+
+
+   d3.select("#dummy").attr("class","error")
+d3.select("#ch2").property("checked",true)
+ //d3.selectAll("input").property("checked",true)
+
+d3.select("#classee").classed("run",true)
+//d3.select("#classee").classed("run",false)
+
+d3.select("body").append("p").text("Hello !")
+
+
+var data = [100, 200, 300];
+var paragraph = d3.select("body")
+.select("p")
+.data(data)//provide data to the selected element
+.text(function (d, i) {
+     console.log("i "+i);
+    console.log("d: "+d)
+    console.log("this: "+ this);
+})
+
+d3.selectAll("p").style("color",function(d,i){
+    var text = this.innerText;
+
+    if (text.indexOf("Error") >=0 ){
+        return "red";
+    } else if (text.indexOf("Warning") >=0){
+        return "yellow";
+    }
+});
+
+
+
+
+
+</script>
+</body>
+</html>
