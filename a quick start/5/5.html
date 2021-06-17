@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> McCdama || D3 </title>
+    <style type="text/css">
+      
+    
+    </style> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+ <p> Tuto will be sth else. </p>
+ <p> Hay</p>
+ <p></p>
+
+<script>
+    var myData = ["Hello !", "Bey", "salam"];
+
+    var p = d3.select("body").selectAll("p").data(myData).text(function(d) {
+        return d;
+    })
+    
+</script>
+</body>
+
+</html>

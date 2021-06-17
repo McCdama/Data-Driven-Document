@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> McCdama || D3 </title>
+    <style type="text/css">
+      
+    
+    </style> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+  <!--   <p>D3</p>
+    <p>JS</p>
+    <p></p>
+    <p></p> -->
+    <p>D3 DATUM .. static</p>
+<script>
+    /*var myData = ["Hey D3! ", "Second P"]
+    var p = d3.select("body")
+    .selectAll("p")
+    .data(myData)
+    .text(function(d,i) {
+        return d; 
+    })
+    .exit()
+    .remove()*/
+
+    d3.select("body")
+    .select("p")
+    .datum("That is a datum ")
+    .text(function(d){
+        return d;
+    })
+    
+</script>
+</body>
+
+</html>
