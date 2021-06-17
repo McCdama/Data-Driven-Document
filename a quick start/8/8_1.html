@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> McCdama || D3 || SVG with D3 </title>
+    <link rel="shortcut icon" href="./../favicon.ico"> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<style type="text/css">
+      svg rect{
+        fill: orange;
+      }
+      svg text{
+        fill: white;
+        font: 10px monospace;
+        text-anchor: end;
+      }
+    
+</style>
+
+<body>
+
+<script>
+    var data =[5, 10, 12]; //defines our data array.
+    //to use later
+    var width= 300; //Width of the svg
+    scaleFactor = 10; //ince our data values are too small, they need to be scaled to a pixel value that is visible on the screen.
+    barHeight = 40; //static height of our horizontal bars.
+
+    var graph = d3.select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", barHeight * data.length)
+
+    //place each bars inside corresponding <g> elements
+    var bar = graph.selectAll("g") //create group elements
+    .data(data)
+    .enter()
+    .append("g")
+    //Each of group elements needs to be positioned one below the other.
+    //because I want to build a horizontal bar chart. 
+    //So..the translation formula will be (current element index * bar height).
+    .attr("transform", function(d, i){
+        return "translate(0," + i * barHeight + ")";
+    });
+
+
+    //add the <rect> element for each bar.
+    bar.append("rect")
+    // width: data value * scale factor
+    .attr("width", function(d){
+        return d * scaleFactor;
+    })
+    //height: bar height - margin
+    .attr("height", barHeight - 1);
+
+    //display the data values as text on each bar
+    
+    bar.append("text")
+    .attr("x", function(d){
+        return (d * scaleFactor);
+    })
+
+    .attr("y", barHeight / 2)
+
+    // !! Text elements do not support padding or margin !!
+    //  For this reason, give it a "dy" offset. This is used to align the text vertically.
+    .attr("dy", ".35em")
+    .text(function(d){
+        return d;
+    })
+
+</script>
+</body>
+
+</html>

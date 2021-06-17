@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> McCdama || D3 || SVG Circle with D3 </title>
+    <link rel="shortcut icon" href="./../favicon.ico"> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style type="text/css">
+      .svg rect {
+            fill: orange;
+        }
+
+       .svg text {
+            fill:white;
+            font: 10px monospace;
+            text-anchor: end;
+        }
+    
+</style>
+</head>
+<body>
+<script>
+var width = 500;
+var height = 500;
+
+var data = [10, 20, 30, 40, 50];
+//to give a color gradient to the circles - one color per circle.
+var colors = ['#ffffcc','#c2e699','#78c679','#31a354','#006837'];
+
+var svg = d3.select("body")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+//creates group element to hold the circles
+var g = svg.selectAll("g")
+//binds our data array to the group elements
+                .data(data)
+//creates placeholders for the group elements.
+                .enter()
+//appends group elements to the page.
+                .append("g")
+//translate is used to position the elements with respect to the origin; here.. positioning it at the origin
+                .attr("transform", function(d, i) {
+                    return "translate(0,0)";
+                })
+//appends the circle to the group.
+g.append("circle")
+    .attr("cx", function(d, i) {
+        return i*100 +/* add some padding between the circles */ 50;
+    })
+.attr("cy", function(d, i) {
+    //our circles should be oriented in the same line horizontally, so.. keep the y-coordinate uniform across our circles.
+        return 100;
+    })
+.attr("r", function(d) {
+    //the size of the circles correspond to the data values, so.. bigger the data value, bigger the circle
+        return d;
+    })
+.attr("fill", function(d, i) {
+        return colors[i];
+    })
+
+    g.append("text")
+    .attr("x", function(d, i) {
+        return i * 100 + 40;
+    })
+    .attr("y", 105)
+    .attr("stroke", "teal")
+    .attr("font-size", "12px")
+    .attr("font-family", "monospace")
+    .text(function(d){
+        return d;
+    });
+
+</script>
+</body>
+
+</html>
