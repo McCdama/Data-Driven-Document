@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> McCdama || D3 || Pie Chart </title>
+    <link rel="shortcut icon" href="./../favicon.ico"> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style type="text/css">
+        
+   /*  METHODS: 
+
+    SVG Path: Creates a path in SVG from the defined commands. https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
+    d3.scaleOrdinal(): Creates an ordinal scale. https://github.com/d3/d3-scale/blob/main/README.md#scaleOrdinal
+    d3.pie(): Creates an pie generator.
+    d3.arc(): Creates an arc generator.
+
+   */
+
+
+   
+    
+</style>
+</head>
+<body>
+    <!-- Path:
+  <svg height="210" width="400">
+        <path d="M150 0 L75 200 L225 200 Z" />
+    </svg> -->
+
+    <svg width="300" height="200"> </svg>
+   
+<script>
+    //the color variable will act as a scaling function which will return specified color for the specified index
+    var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c']);
+    console.log(color(0))
+    console.log(color(1))
+    console.log(color(2))
+    console.log(color(3))
+    console.log(color(4))
+    console.log(color(5))
+
+
+
+/* d3.Pie() */
+   var data = [2, 4, 8, 10];
+    var pie = d3.pie() //This function calculated certain fields for the pie chart like startAngle and endAngle along with the data values.
+    console.log(pie(data))
+
+
+/* d3.arc() */
+
+var svg = d3.select("svg"),
+        width = svg.attr("width"),
+        height = svg.attr("height"),
+        radius = Math.min(width, height) / 2,
+        g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c']);
+
+    // Generate the pie
+    var pie = d3.pie();
+
+    // Generate the arcs
+    var arc = d3.arc()
+                .innerRadius(0)
+                .outerRadius(radius);
+
+    //Generate groups
+    var arcs = g.selectAll("arc")
+                .data(pie(data))
+                .enter()
+                .append("g")
+                .attr("class", "arc")
+
+    //Draw arc paths
+    arcs.append("path")
+        .attr("fill", function(d, i) {
+            return color(i);
+        })
+        .attr("d", arc);
+</script>
+</body>
+
+</html>
