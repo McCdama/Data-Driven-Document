@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <title> McCdama || D3 </title>
+</head>
+<style type="text/css">
+    .myClass{
+        color: red;
+    }
+</style>
+<body>
+<!--  <p id="p1"> First Para</p>
+<p id="p2"> Second Para</p>-->
+<p class="myClass"> Para One</p>
+<p class="myClass"> Para Two</p>
+<p class="otherClass">Third paragraph</p>
+<table>
+<tr>
+    <td>One</td>
+    <td>Two</td>
+</tr>
+<tr>
+    <td>Three</td>
+    <td>Four</td>
+</tr>
+</table>
+<script>
+    // write your d3 code here.. 
+   //d3.select("p").style("color","red")
+   //d3.select("#p1").style("color", "green")
+   //d3.selectAll("p").style("color", "Blue")
+   //d3.selectAll(".myClass").style("color","grey")
+   d3.select("tr").select("td").style("background-color", "orange")
+</script>
+</body>
+</html>
