@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> McCdama || D3 || Data Loading </title>
+    <link rel="shortcut icon" href="./../favicon.ico">
+    <style type="text/css">
+      
+    
+    </style> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+
+<script>
+    d3.csv("employee.csv", function(data) {
+        console.log(":::DATA:::");
+        console.log(data);
+  })
+    d3.csv("employee.csv", function(data) {
+      for (var i = 0; i < data.length; i++) {
+        console.log(data[i].FIRST_NAME);
+        console.log(data[i].LAST_NAME);
+        console.log(data[i].PHONE_NUMBER);
+        console.log(data[i].MANAGER_ID);
+        console.log(data[i].DEPARTMENT_ID);
+        console.log("-----NEXT-----");
+      }
+  })
+
+    d3.csv("employee.csv")
+    .get(function(data){
+      console.log("EQUIVALENT:");
+      console.log(data);
+    })
+</script>
+</body>
+
+</html>
