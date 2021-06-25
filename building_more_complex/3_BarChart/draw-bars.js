@@ -87,5 +87,42 @@ async function drawBars() {
     .attr("fill", "darkgrey")
     .style("font-size", "12px")
     .style("font-family", "monospace");
+
+  const mean = d3.mean(dataset, metricAccessor);
+  const meanLine = bounds
+    .append("line")
+    .attr("x1", xScale(mean))
+    .attr("x2", xScale(mean))
+    .attr("y1", -15)
+    .attr("y2", dimensions.boundedHeight)
+    .attr("stroke", "maroon")
+    .attr("stroke-dasharray", "2px 4px");
+
+  const meanLabel = bounds
+    .append("text")
+    .attr("x", xScale(mean))
+    .attr("y", -20)
+    .text("mean")
+    .attr("fill", "maroon")
+    .style("font-size", "12px")
+    .style("text-anchor", "middle");
+
+  // 6. Draw peripherals
+
+  const xAxisGenerator = d3.axisBottom().scale(xScale);
+
+  const xAxis = bounds
+    .append("g")
+    .call(xAxisGenerator)
+    .style("transform", `translateY(${dimensions.boundedHeight}px)`);
+
+  const xAxisLabel = xAxis
+    .append("text")
+    .attr("x", dimensions.boundedWidth / 2)
+    .attr("y", dimensions.margin.bottom - 10)
+    .attr("fill", "black")
+    .style("font-size", "1.4em")
+    .text("Humidity")
+    .style("text-transform", "capitalize");
 }
 drawBars();
