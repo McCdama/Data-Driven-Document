@@ -1,0 +1,72 @@
+/* Basic styles */
+.bin rect {
+    fill: cornflowerblue;
+    /* Anim */
+    /* transition: all 1s ease-out; */
+    /* now we can see weather each bar is increasing or decreasing */
+    transition: height 1s ease-out,
+    y 1s ease-out;
+}
+
+.bin text {
+    text-anchor: middle;
+    fill: darkgrey;
+    font-size: 12px;
+    font-family: sans-serif;
+     /* Anim */
+     /* we need to animate the bar labels with the bars */
+     /* transition: y 1s ease-out; still not anim--see JS file :102 */
+    /* after editing the Js file */
+     transition: transform 1s ease-out;
+    }
+
+.mean {/* we need also here to animate the LINE when it moves left or right.. see :112 */
+    stroke: maroon;
+    stroke-dasharray: 2px 4px;
+    /* Anim */
+    transition: transform 1s ease-out;
+}
+
+.x-axis-label {
+    fill: black;
+    font-size: 1.4em;
+    text-transform: capitalize;
+}
+/* region basic ends */
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+}
+
+button {
+    font-size: 1.2em;
+    margin-left: 1em;
+    padding: 0.5em 1em;
+    appearance: none;
+    -webkit-appearance: none;
+    background: darkseagreen;
+    color: white;
+    border: none;
+    box-shadow: 0 5px 0 0 seagreen;
+    border-radius: 6px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.1s ease-out;
+}
+
+button:hover,
+button:focus {
+    background: #73b173;
+    box-shadow: 0 4px 0 0 seagreen;
+    transform: translateY(1px);
+}
+
+button:hover:active,
+button:focus:active,
+button:active {
+    box-shadow: 0 1px 0 0 seagreen;
+    transform: translateY(4px);
+}

@@ -1,0 +1,14 @@
+.box {
+    background: cornflowerblue;
+    height: 100px;
+    width: 100px;
+    transition: transform 1s steps(6),
+                background 2s ease-out;
+    /* transition-duration: 1s; */
+
+}
+
+.box:hover {
+    background: yellowgreen;
+    transform: translateX(30px);
+}
