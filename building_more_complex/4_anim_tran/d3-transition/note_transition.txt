@@ -1,0 +1,13 @@
+When we want to use d3.transition() instead of CSS transition?
+
+- When we want to ensure that multiple animations line up.
+
+- when we want to do sth. when the animation ends (e.g starting another animation).
+
+- when the property we want to animate is not a CSS property (see .bin text {..} and meanLine).
+
+- when we want to synchronize adding and removing elements with animations.
+
+- when we might interrupt halfway through a transition.
+
+- when we want a custom animation (e.g we could write a custom interpolator for changing text that adds new letter one-by-one).
