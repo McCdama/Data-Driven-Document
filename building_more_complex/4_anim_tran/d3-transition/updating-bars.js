@@ -74,19 +74,43 @@ async function drawBars() {
       .nice();
 
     // 5. Draw data
+    /* animate the bars when they leaving */
+    const exitTransition = d3.transition().duration(600);
+    const updateTransition = exitTransition.transition().duration(600);
+
+    /* the animation was out of sync with the labels again!
+      by doing so we can make a transition on the root document that can be used in multiple places.
+      */
+    /* const updateTransition = d3
+      .transition()
+      .duration(600)
+      .ease(d3.easeBounceIn);
+    console.log(updateTransition); */
+    /* expand the _groups array and see that this transition is indeed targeting
+     * the root <html> element.
+     */
 
     const barPadding = 1;
 
     let binGroups = bounds.select(".bins").selectAll(".bin").data(bins);
 
     const oldBinGroups = binGroups.exit();
-    oldBinGroups.remove();
+    oldBinGroups
+      .selectAll("rect")
+      .style("fill", "orangered")
+      .transition(exitTransition)
+      .attr("y", dimensions.boundedHeight)
+      .attr("height", 0);
+
+    oldBinGroups
+      .selectAll("text")
+      .transition(exitTransition)
+      .attr("y", dimensions.boundedHeight);
+
+    oldBinGroups.transition(exitTransition).remove();
 
     const newBinGroups = binGroups.enter().append("g").attr("class", "bin");
 
-    // isolate the data points
-    /*   newBinGroups.append("rect");
-    newBinGroups.append("text"); */
     newBinGroups
       .append("rect")
       .attr("height", 0)
@@ -95,39 +119,54 @@ async function drawBars() {
       .attr("width", (d) =>
         d3.max([0, xScale(d.x1) - xScale(d.x0) - barPadding])
       )
+      /* we using .style() instead if .attr() because we need to fill the value to be an inline style
+       * instead of an SVG attribute in order to override the CSS styles in styles.css  */
       .style("fill", "yellowgreen");
 
+    newBinGroups
+      .append("text")
+      /* set the label's initial position to prevent them from flying in from the left */
+      .attr("x", (d) => xScale(d.x0) + (xScale(d.x1) - xScale(d.x0)) / 2)
+      .attr("y", dimensions.boundedHeight);
+
     // update binGroups to include new points
-    //we can use the .transition() method on d3 selection object to transform the selection object into a d3 trnasition object.
-
-    /* binGroups = newBinGroups.merge(binGroups);
-    const barRects = binGroups
-      .select("rect")
-      .attr("x", (d) => xScale(d.x0) + barPadding)
-      .attr("y", (d) => yScale(yAccessor(d)))
-      .attr("height", (d) => dimensions.boundedHeight - yScale(yAccessor(d)))
-      .attr("width", (d) =>
-        d3.max([0, xScale(d.x1) - xScale(d.x0) - barPadding])
-      );
-    console.log(barRects);
- */
-
     binGroups = newBinGroups.merge(binGroups);
 
     const barRects = binGroups
       .select("rect")
+      /* we can use the .transition() methode on the d3 selection object
+       * to transform the selection object into a d3 transition object.
+       */
+      //.transition() /* now we have two additional keys: _id and _name */
+      /*  see also the __proto__ of the transition object,
+       * which contains d3-specific methods
+       * and the nested __proto__: Object contains native object methods such as toString().
+       * we can see also some methods are ingerited form d3 selection object such as call() and each() */
 
-      .transition() // parent have now two additional keys: _id and _name
+      /* slow things down */
+      //.duration(600)
+      /* specify a timing func = CSS's transition-timing-func  to give the animation some life */
+      // .ease(d3.easeBounceOut)
+
+      /* update: to use the updateTransition instead of creating a new on */
+      .transition(updateTransition)
       .attr("x", (d) => xScale(d.x0) + barPadding)
       .attr("y", (d) => yScale(yAccessor(d)))
       .attr("height", (d) => dimensions.boundedHeight - yScale(yAccessor(d)))
       .attr("width", (d) =>
         d3.max([0, xScale(d.x1) - xScale(d.x0) - barPadding])
-      );
-    console.log(barRects);
+      )
+      .transition()
+      .style("fill", "cornflowerblue");
+    //console.log(barRects);
 
     const barText = binGroups
       .select("text")
+      /* adding another transition to make the text transition with the bars */
+      //.transition()
+      //.duration(600)
+      /* update: to use the updateTransition instead of creating a new on */
+      .transition(updateTransition)
       .attr("x", (d) => xScale(d.x0) + (xScale(d.x1) - xScale(d.x0)) / 2)
       .attr("y", (d) => yScale(yAccessor(d)) - 5)
       .text((d) => yAccessor(d) || "");
@@ -136,6 +175,8 @@ async function drawBars() {
 
     const meanLine = bounds
       .selectAll(".mean")
+      /* use the updateTransition*/
+      .transition(updateTransition)
       .attr("x1", xScale(mean))
       .attr("x2", xScale(mean))
       .attr("y1", -20)
@@ -145,7 +186,11 @@ async function drawBars() {
 
     const xAxisGenerator = d3.axisBottom().scale(xScale);
 
-    const xAxis = bounds.select(".x-axis").call(xAxisGenerator);
+    const xAxis = bounds
+      .select(".x-axis")
+      /* update: use the updateTransition*/
+      .transition(updateTransition)
+      .call(xAxisGenerator);
 
     const xAxisLabel = xAxis.select(".x-axis-label").text(metric);
   };
