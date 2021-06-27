@@ -1,0 +1,13 @@
+A <clipPath> is an SVG element that:
+
+- is sized by its children.
+If a <clipPath> contains a circle, it will only paint content within that circle's bounds.
+
+- can be referenced by another SVG element, using <clipPath> id's.
+
+
+SVG convention: <defs>
+is used to store any re-usable definitions that are used later in the <svg>.
+
+By placing any <clipPath> or gradients in our <defs> element, we'll make our code more accessible.
+also we'll know where to look when we're debugging. 
