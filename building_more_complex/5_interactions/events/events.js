@@ -16,13 +16,26 @@ async function createEvent() {
 
   // create listeners /* arrow func refers to the lexical scope .. meaning that (this) will always refer to the same thing inside and outside of a func. */
 
-  // that's works JUST on version 4.13.0
+  /*  // that's works JUST on version 4.13.0
   rects
     .on("mouseenter", function (datum, index, nodes) {
       d3.select(this).style("fill", datum);
     })
     .on("mouseout", function () {
       d3.select(this).style("fill", "rgb(128, 96, 0)");
+    }); */
+  // after the msg from the other //
+
+  //https://github.com/d3/d3-selection#selection_on
+
+  rects
+    .on("mouseenter", function (e, d) {
+      console.log(e.currentTarget);
+      d3.select(e.currentTarget).style("fill", d);
+    })
+    .on("mouseout", function (e) {
+      d3.select(this).style("fill", "rgb(128, 96, 0)");
+      console.log(e);
     });
 
   // that's works on higher version of 4.13.0
