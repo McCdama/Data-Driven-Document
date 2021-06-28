@@ -117,5 +117,14 @@ async function drawBars() {
     .text("Humidity");
 
   // 7. Set up interactions
+  binGroups.select("rect").on("mouseenter", onMouseEnter);
+
+  const tooltip = d3.select("#tooltip");
+  function onMouseEnter(e, datum) {
+    console.log(e.currentTarget);
+    tooltip.select("#count").text(yAccessor(datum));
+    /* update the range value to mactch the hovered bar */
+    tooltip.select("#range").text([datum.x0, datum.x1].join(" - "));
+  }
 }
 drawBars();
