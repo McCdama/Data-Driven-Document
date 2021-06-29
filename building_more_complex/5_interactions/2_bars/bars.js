@@ -128,6 +128,36 @@ async function drawBars() {
     tooltip
       .select("#range")
       .text([formatHumidity(datum.x0), formatHumidity(datum.x1)].join(" - "));
+    /* Positioning the tooltip horizontally above a bar when hover over it. */
+    /* Note: the tooltip is located at thee top of left of the WRAPPER.
+     * Since the bars are within the bounnds, they are shifted by the margin we specified.
+     */
+    /* get the x position of the tooltip:
+     * 1- the bar's x position in the chart (xScale(datum.x0)).
+     * 2- half of the bar's width ((xScale(datum.x1) - xScale(datum.x0)) / 2).
+     * 3- the marin by which the bounds are shifted right (dimensions.margin.left?).
+     */
+
+    const x =
+      xScale(datum.x0) +
+      (xScale(datum.x1) - xScale(datum.x0)) / 2 +
+      dimensions.margin.left;
+    /* calculating the tooltip's y position don't take into account the bar's dimensions,
+     * because we want to place it above the bar.
+     */
+    const y = yScale(yAccessor(datum)) + dimensions.margin.top;
+    /* we're working with a normal xHTML div, we'll use the CSS translate prop. */
+    /* tooltip.style("transform", `translate(` + `${x}px,` + `${y}px` + `)`); */ // not working well
+    /* .getBoundingClientRect() to find the tooltip size. */
+    /* ways to shift absoultly positioned elements using CSS prop
+  - top, bottom: percentage of the parent's height // left, right: percentage of the parent's width
+  - margins: percentage of the parent's width
+  - transform: translate():  percentage of the specified element.*/
+    /* HOW WE CAN TRANSLATE VALUE USING A PIXEL AMOUNT AND A WIDTH --> calc() to calculte the offset based on values with differents units */
+    tooltip.style(
+      "transform",
+      `translate(` + `calc( -50% + ${x}px),` + `calc(-100% + ${y}px)` + `)`
+    ); // PERFECT :)
   }
 }
 drawBars();
