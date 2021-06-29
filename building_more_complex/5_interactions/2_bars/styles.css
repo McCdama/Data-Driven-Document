@@ -36,7 +36,7 @@ body {
 
 .tooltip {
     /* opacity: 0; */ /* hidden */
-
+ opacity: 0;
     /* pointed at the top left */
     position: absolute; /* placed relative to their containing blocks --> here is the default <html> element */ 
     top: -12px;

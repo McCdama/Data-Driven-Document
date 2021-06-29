@@ -118,7 +118,10 @@ async function drawBars() {
 
   // 7. Set up interactions
   formatHumidity = d3.format(".2f"); //https://github.com/d3/d3-format
-  binGroups.select("rect").on("mouseenter", onMouseEnter);
+  binGroups
+    .select("rect")
+    .on("mouseenter", onMouseEnter)
+    .on("mouseleave", onMouseLeave);
 
   const tooltip = d3.select("#tooltip");
   function onMouseEnter(e, datum) {
@@ -158,6 +161,12 @@ async function drawBars() {
       "transform",
       `translate(` + `calc( -50% + ${x}px),` + `calc(-100% + ${y}px)` + `)`
     ); // PERFECT :)
+
+    /* Hide the tooltip when not hovering over */
+    tooltip.style("opacity", 1);
+  }
+  function onMouseLeave() {
+    tooltip.style("opacity", 0);
   }
 }
 drawBars();
