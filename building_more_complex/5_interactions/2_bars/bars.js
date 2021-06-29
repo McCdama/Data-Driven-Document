@@ -117,6 +117,7 @@ async function drawBars() {
     .text("Humidity");
 
   // 7. Set up interactions
+  formatHumidity = d3.format(".2f"); //https://github.com/d3/d3-format
   binGroups.select("rect").on("mouseenter", onMouseEnter);
 
   const tooltip = d3.select("#tooltip");
@@ -124,7 +125,9 @@ async function drawBars() {
     console.log(e.currentTarget);
     tooltip.select("#count").text(yAccessor(datum));
     /* update the range value to mactch the hovered bar */
-    tooltip.select("#range").text([datum.x0, datum.x1].join(" - "));
+    tooltip
+      .select("#range")
+      .text([formatHumidity(datum.x0), formatHumidity(datum.x1)].join(" - "));
   }
 }
 drawBars();
