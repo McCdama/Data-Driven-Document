@@ -120,6 +120,17 @@ async function drawLineChart() {
     .on("mouseleave", onMouseLeave);
 
   const tooltip = d3.select("#tooltip");
+  /* ::Extra:::  positioning a cricle over the hovered spot*/
+
+  const tooltipCircle = bounds
+    .append("circle")
+    .attr("r", 4)
+    .attr("stroke", "#af9358")
+    .attr("fill", "white")
+    .attr("stroke-width", 2)
+    .style("opacity", 0); /* hide it until it starts */
+
+  /* End region Extra */
   function onMouseMove(e) {
     //  console.log("In");
     // we have location problem here.. how do we know -->d3.mouse()!! Deprec use now d3.pointer(e) return x,y coords of the mouse event.
@@ -175,11 +186,19 @@ async function drawLineChart() {
     );
 
     tooltip.style("opacity", 1);
+    /* For the extra section */
+    tooltipCircle
+      .attr("cx", xScale(closestXValue))
+      .attr("cy", yScale(closestYValue))
+      .style("opacity", 1);
+    /* extra sec. ends here */
   }
   function onMouseLeave() {
     ///console.log("Out");
 
     tooltip.style("opacity", 0);
+    /* For the extra section */
+    tooltipCircle.attr("opacity", 0);
   }
 }
 drawLineChart();
