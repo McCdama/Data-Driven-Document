@@ -19,7 +19,9 @@
     transform: rotate(-90deg);
 }
 
-.listening-rect {}
+.listening-rect {
+    fill: transparent;
+}
 
 body {
     display: flex;

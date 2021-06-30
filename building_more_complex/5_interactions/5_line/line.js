@@ -1,7 +1,7 @@
 async function drawLineChart() {
   // 1. Access data
 
-  let dataset = await d3.json("./../../../my_weather_data.json");
+  let dataset = await d3.json("./../../my_weather_data.json");
 
   const yAccessor = (d) => d.temperatureMax;
   const dateParser = d3.timeParse("%Y-%m-%d");
@@ -108,5 +108,78 @@ async function drawLineChart() {
     .call(xAxisGenerator);
 
   // 7. Set up interactions
+  /* display a tooltip whenever hovering anywehre on the chart
+   * we want an element that spans the entire BOUNDS.
+   */
+  const listeningRect = bounds
+    .append("rect")
+    .attr("class", "listening-rect")
+    .attr("width", dimensions.boundedWidth)
+    .attr("height", dimensions.boundedHeight)
+    .on("mousemove", onMouseMove)
+    .on("mouseleave", onMouseLeave);
+
+  const tooltip = d3.select("#tooltip");
+  function onMouseMove(e) {
+    //  console.log("In");
+    // we have location problem here.. how do we know -->d3.mouse()!! Deprec use now d3.pointer(e) return x,y coords of the mouse event.
+    const mousePosition = d3.pointer(e);
+
+    //console.log(mousePosition);
+
+    /* what data we're hovering over
+     * how do we convert an x position into a date--
+     * earlier we've used scale to convert from data space to pixel space */
+
+    const hoveredDate = xScale.invert(mousePosition[0]);
+    //console.log(hoveredDate); // GREAZ
+
+    /* Now.. find the closest data point.
+     *** where a variable will fit in a sorted list->  use scan(array, comparator) see: https://www.geeksforgeeks.org/d3-js-d3-scan-function/
+     */
+    /* function to find the distance btw the hovered point and a datapoint */
+    const getDistanceFromHoveredDate = (d) =>
+      Math.abs(xAccessor(d) - hoveredDate);
+
+    /* function to compare the two data points in the scan() =>this will create an array
+     * of distances from the hovered point , and get the index of the closest data point to the hovered date.
+     */
+    const closestIndex = d3.scan(
+      dataset,
+      (a, b) => getDistanceFromHoveredDate(a) - getDistanceFromHoveredDate(b)
+    );
+    /* grab the data point at the index */
+    const closestDataPoint = dataset[closestIndex];
+    //console.table(closestDataPoint); //hover on the left and see dates close to the beginning of the data set.
+    /* grab the closest x and y values using the accessor func. */
+    const closestXValue = xAccessor(closestDataPoint);
+    const closestYValue = yAccessor(closestDataPoint);
+    /* use the closestXValue to set the date in the tooltip */
+    const formatDate = d3.timeFormat("%B %A %-d, %Y");
+    tooltip.select("#date").text(formatDate(closestXValue));
+    /* set the temperature value in the tooltip */
+    const fomatTemperature = (d) => `${d3.format(".1f")(d)}°F`;
+    tooltip.select("#temperature").text(fomatTemperature(closestYValue));
+
+    /* LASTLY, grab the x and y position of the closest point,
+     * shift the tooltip
+     * hide/show the tooltip appropriately
+     */
+
+    const x = xScale(closestXValue) + dimensions.margin.left;
+    const y = yScale(closestYValue) + dimensions.margin.top;
+
+    tooltip.style(
+      "transform",
+      `translate(` + `calc( -50% + ${x}px),` + `calc(-100% + ${y}px)` + `)`
+    );
+
+    tooltip.style("opacity", 1);
+  }
+  function onMouseLeave() {
+    ///console.log("Out");
+
+    tooltip.style("opacity", 0);
+  }
 }
 drawLineChart();
