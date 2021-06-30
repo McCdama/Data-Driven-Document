@@ -134,8 +134,18 @@ async function drawScatter() {
       `translate(` + `calc( -50% + ${x}px),` + `calc(-100% + ${y}px)` + `)`
     );
     tooltip.style("opacity", 1);
+    /* EXTRA: Tooltip Dot on pointer event */
+    const dayDot = bounds
+      .append("circle")
+      .attr("class", "tooltipDot")
+      .attr("cx", xScale(xAccessor(index)))
+      .attr("cy", yScale(yAccessor(index)))
+      .attr("r", 7)
+      .style("fill", "maroon")
+      .style("pointer-events", "none");
   }
   function onMouseleave() {
+    d3.selectAll(".tooltipDot").remove();
     tooltip.style("opacity", 0);
   }
 }
