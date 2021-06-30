@@ -99,15 +99,17 @@ async function drawScatter() {
 
   // 7. Set up interactions
 
+  // https://github.com/d3/d3-delaunay
+  // create a new Delaunay triangulation; a way to join a set of points to create a triangular mesh.
+  // pass d3.Delaunay.from() three params
   const delaunay = d3.Delaunay.from(
     dataset,
     (d) => xScale(xAccessor(d)),
     (d) => yScale(yAccessor(d))
   );
+  // now turn the Delaunay triangulation into a voronoi diagram
   const voronoi = delaunay.voronoi();
-  voronoi.xmax = dimensions.boundedWidth;
-  voronoi.ymax = dimensions.boundedHeight;
-
+  // bind data and add a <path> for each.
   bounds
     .selectAll(".voronoi")
     .data(dataset)
@@ -115,46 +117,6 @@ async function drawScatter() {
     .append("path")
     .attr("class", "voronoi")
     .attr("d", (d, i) => voronoi.renderCell(i))
-    // .attr("stroke", "salmon")
-    .on("mouseenter", onMouseEnter)
-    .on("mouseleave", onMouseLeave);
-
-  const tooltip = d3.select("#tooltip");
-  function onMouseEnter(e, datum) {
-    const dayDot = bounds
-      .append("circle")
-      .attr("class", "tooltipDot")
-      .attr("cx", xScale(xAccessor(datum)))
-      .attr("cy", yScale(yAccessor(datum)))
-      .attr("r", 7)
-      .style("fill", "maroon")
-      .style("pointer-events", "none");
-
-    const formatHumidity = d3.format(".2f");
-    tooltip.select("#humidity").text(formatHumidity(yAccessor(datum)));
-
-    const formatDewPoint = d3.format(".2f");
-    tooltip.select("#dew-point").text(formatDewPoint(xAccessor(datum)));
-
-    const dateParser = d3.timeParse("%Y-%m-%d");
-    const formatDate = d3.timeFormat("%B %A %-d, %Y");
-    tooltip.select("#date").text(formatDate(dateParser(datum.date)));
-
-    const x = xScale(xAccessor(datum)) + dimensions.margin.left;
-    const y = yScale(yAccessor(datum)) + dimensions.margin.top;
-
-    tooltip.style(
-      "transform",
-      `translate(` + `calc( -50% + ${x}px),` + `calc(-100% + ${y}px)` + `)`
-    );
-
-    tooltip.style("opacity", 1);
-  }
-
-  function onMouseLeave() {
-    d3.selectAll(".tooltipDot").remove();
-
-    tooltip.style("opacity", 0);
-  }
+    .attr("stroke", "salmon");
 }
 drawScatter();
