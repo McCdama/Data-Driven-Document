@@ -121,6 +121,24 @@ async function drawScatter() {
     .append("path")
     .attr("class", "voronoi")
     .attr("d", (d, i) => voronoi.renderCell(i))
-    .attr("stroke", "salmon");
+    .attr("stroke", "salmon") // try to comment it out and see
+    /* capture hover event */
+    .on("mouseenter", onMouseEnter)
+    .on("mouseleave", onMouseLeave);
+  const tooltip = d3.select("#tooltip");
+  function onMouseEnter(e, datum) {
+    const dayDot = bounds
+      .append("circle")
+      .attr("class", "tooltipDot")
+      .attr("cx", xScale(xAccessor(datum)))
+      .attr("cy", yScale(yAccessor(datum)))
+      .attr("r", 7)
+      .style("fill", "maroon")
+      .style("pointer-events", "none");
+  }
+  function onMouseLeave() {
+    d3.selectAll(".tooltipDot").remove();
+    tooltip.style("opacity", 0);
+  }
 }
 drawScatter();
