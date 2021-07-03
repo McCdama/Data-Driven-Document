@@ -79,5 +79,10 @@ async function drawMap() {
   console.log(metricValueExtent);
 
   /* create a piecewise scales (middle)--> multiple scale in one */
+  const maxChange = d3.max([-metricValueExtent[0], metricValueExtent[1]]);
+  const colorScale = d3
+    .scaleLinear()
+    .domain([-maxChange, 0, maxChange])
+    .range(["indigo", "white", "darkgreen"]);
 }
 drawMap();
