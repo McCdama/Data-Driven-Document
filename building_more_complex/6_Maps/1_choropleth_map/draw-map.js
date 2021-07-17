@@ -6,8 +6,8 @@ async function drawMap() {
   console.log(dataset);
   // 4-keys: crs, features, name, type. Each features has a geometry Obj and a prop.
 
-  /* const countryNameAccessor = (d) => d.properties["NAME"];
-    const countryIdAccessor = (d) => d.properties["ADM0_A3_IS"]; */
+  const countryNameAccessor = (d) => d.properties["NAME"];
+  const countryIdAccessor = (d) => d.properties["ADM0_A3_IS"];
 
   const metric = "Population growth (annual %)";
   let metricDataByCountry = {};
@@ -84,5 +84,95 @@ async function drawMap() {
     .scaleLinear()
     .domain([-maxChange, 0, maxChange])
     .range(["indigo", "white", "darkgreen"]);
+
+  /* Draw Data */
+
+  const earth = bounds
+    .append("path")
+    .attr("class", "earth")
+    .attr("d", pathGenerator(sphere));
+
+  /* display a graticule on map */
+  const graticuleJson = d3.geoGraticule10();
+  console.log(graticuleJson);
+
+  const graticule = bounds
+    .append("path")
+    .attr("class", "graticule")
+    .attr("d", pathGenerator(graticuleJson));
+
+  /* draw the countries */
+  const countries = bounds
+    .selectAll(".country")
+    .data(countryShapes.features)
+    .enter()
+    .append("path")
+    .attr("class", "country")
+    .attr("d", pathGenerator)
+    .attr("fill", (d) => {
+      const metricValue = metricDataByCountry[countryIdAccessor(d)];
+      if (typeof metricValue == "undefined") return "#e2e6e9";
+      return colorScale(metricValue);
+    });
+
+  /* Draw Peripherals */
+  /* LEGEND */
+
+  const legendGroup = wrapper
+    .append("g")
+    .attr(
+      "transform",
+      `translate(${120}, ${
+        dimensions.width < 800
+          ? dimensions.boundedHeight - 30
+          : dimensions.boundedHeight * 0.5
+      })`
+    );
+
+  const legendTitle = legendGroup
+    .append("text")
+    .attr("y", -23)
+    .attr("class", "legend-title")
+    .text("Population growth");
+
+  // to store the gradient
+  const defs = wrapper.append("defs");
+  // to hold the id of the gradient
+  const legendGradientId = "legend-gradient";
+
+  // set the id attribute to the legendGradientId--> so we can ref the gradient later
+  const gradient = defs
+    .append("linearGradient")
+    .attr("id", legendGradientId)
+    .selectAll("stop")
+    .data(colorScale.range())
+    .enter()
+    .append("stop")
+    .attr("stop-color", (d) => d)
+    .attr("offset", (d, i) => `${(i * 100) / 2}`);
+
+  const legendWidth = 120;
+  const legendHeight = 16;
+  const legendGradient = legendGroup
+    .append("rect")
+    .attr("x", -legendWidth / 2)
+    .attr("height", legendHeight)
+    .attr("width", legendWidth)
+    .style("fill", `url(#${legendGradientId})`);
+
+  const legendValueRight = legendGroup
+    .append("text")
+    .attr("class", "legend-value")
+    .attr("x", legendWidth / 2 + 10)
+    .attr("y", legendHeight / 2)
+    .text(`${d3.format(".1f")(maxChange)}%`);
+
+  const legendValueLeft = legendGroup
+    .append("text")
+    .attr("class", "legend-value")
+    .attr("x", -legendWidth / 2 - 10)
+    .attr("y", legendHeight / 2)
+    .text(`${d3.format(".1f")(-maxChange)}%`)
+    .style("text-anchor", "end");
 }
 drawMap();
